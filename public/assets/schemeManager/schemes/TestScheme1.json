@@ -1,0 +1,42 @@
+[
+    {
+        "itemName": "拆除地板",
+        "count": 40,
+        "unit": "㎡",
+        "laborCost": 10,
+        "materialCost": 15,
+        "region": "客餐厅",
+        "isAdopt": false,
+        "remark": ""
+    },
+    {
+        "itemName": "铺地板",
+        "count": 40,
+        "unit": "㎡",
+        "laborCost": 15,
+        "materialCost": 30,
+        "region": "客餐厅",
+        "isAdopt": false,
+        "remark": ""
+    },
+    {
+        "itemName": "拆除地板",
+        "count": 30,
+        "unit": "㎡",
+        "laborCost": 20,
+        "materialCost": 40,
+        "region": "厨房",
+        "isAdopt": true,
+        "remark": ""
+    },
+    {
+        "itemName": "铺地板",
+        "count": 50,
+        "unit": "㎡",
+        "laborCost": 30,
+        "materialCost": 20,
+        "region": "厨房",
+        "isAdopt": true,
+        "remark": ""
+    }
+]
