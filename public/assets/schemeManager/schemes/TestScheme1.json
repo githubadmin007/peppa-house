@@ -4,14 +4,14 @@
         "count": 40,
         "unit": "㎡",
         "laborCost": 10,
-        "materialCost": 15,
+        "materialCost": 55,
         "region": "客餐厅",
         "isAdopt": false,
         "remark": ""
     },
     {
         "itemName": "铺地板",
-        "count": 40,
+        "count": 20,
         "unit": "㎡",
         "laborCost": 15,
         "materialCost": 30,

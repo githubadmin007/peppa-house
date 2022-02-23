@@ -8,10 +8,12 @@
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import { schemeList, Scheme } from '@/hooks';
+import { getSchemeList, Scheme } from '@/hooks';
 import Overview from './Overview.vue';
 
 const router = useRouter();
+
+const schemeList = getSchemeList();
 
 function schemeClickHandle(scheme: Scheme) {
     router.push(`/Scheme/Editor/${scheme.schemeName}`);

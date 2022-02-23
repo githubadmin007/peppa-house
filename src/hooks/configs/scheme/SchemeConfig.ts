@@ -1,20 +1,7 @@
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
+import { IPendItem, IScheme, ISchemeItem } from './';
 
-/** 候选项目接口 */
-export interface IPendItem {
-    itemName: string;
-    region: string;
-    count: number;
-    unit: string;
-}
-
-/** 方案中的项目接口 */
-export interface ISchemeItem extends IPendItem {
-    laborCost: number;
-    materialCost: number;
-    isAdopt: boolean;
-    remark: string;
-}
+const pendItems = window.AppConfig.PendItems;
 
 /** 方案中的项目 */
 export class SchemeItem implements ISchemeItem {
@@ -27,34 +14,27 @@ export class SchemeItem implements ISchemeItem {
     isAdopt: boolean;
     remark: string;
 
-    constructor(schemeItem: ISchemeItem) {
-        this.itemName = schemeItem.itemName;
-        this.region = schemeItem.region;
-        this.count = schemeItem.count;
-        this.unit = schemeItem.unit;
-        this.laborCost = schemeItem.laborCost;
-        this.materialCost = schemeItem.materialCost;
-        this.isAdopt = schemeItem.isAdopt;
-        this.remark = schemeItem.remark;
-    }
-
     /** 单位费用 */
     get unitCost() {
         return this.laborCost + this.materialCost;
     }
 
-    /** 总费用 */
+    /** 项目总费用 */
     get totalCost() {
         return this.unitCost * this.count;
     }
-}
 
-/** 方案接口 */
-export interface IScheme {
-    schemeName: string;
-    fileName: string;
-    provider: string;
-    remark: string;
+    constructor(schemeItem: IPendItem | ISchemeItem) {
+        const _schemeItem = schemeItem as ISchemeItem;
+        this.itemName = schemeItem.itemName;
+        this.region = schemeItem.region;
+        this.count = schemeItem.count;
+        this.unit = schemeItem.unit;
+        this.laborCost = _schemeItem.laborCost ?? 0;
+        this.materialCost = _schemeItem.materialCost ?? 0;
+        this.isAdopt = _schemeItem.isAdopt ?? false;
+        this.remark = _schemeItem.remark ?? '';
+    }
 }
 
 /** 方案 */
@@ -74,12 +54,9 @@ export class Scheme implements IScheme {
     /** 方案中的项目 */
     schemeItems: SchemeItem[] = [];
 
-    /** 构造函数 */
-    constructor(scheme: IScheme) {
-        this.schemeName = scheme.schemeName;
-        this.fileName = scheme.fileName;
-        this.provider = scheme.provider;
-        this.remark = scheme.remark;
+    /** 方案总费用 */
+    get totalPrice() {
+        return this.schemeItems.map(item => item.totalCost).$sum();
     }
 
     /** 项目文件路径 */
@@ -87,9 +64,17 @@ export class Scheme implements IScheme {
         return `/assets/schemeManager/schemes/${this.fileName}.json`;
     }
 
-    /** 总费用 */
-    get totalPrice() {
-        return this.schemeItems.map(item => item.totalCost).$sum();
+    /** 构造函数 */
+    constructor(scheme: IScheme) {
+        this.schemeName = scheme.schemeName;
+        this.fileName = scheme.fileName;
+        this.provider = scheme.provider;
+        this.remark = scheme.remark;
+        this.initPendItems();
+    }
+
+    initPendItems() {
+        this.schemeItems = pendItems.map(item => new SchemeItem(item));
     }
 
     /** 获取方案中的项目 */
@@ -108,9 +93,11 @@ export class Scheme implements IScheme {
     }
 }
 
-export const schemeList = reactive<Scheme[]>((window as any).AppConfig.SchemeList.map((scheme: any) => new Scheme(scheme)));
+const schemeList = reactive<Scheme[]>(window.AppConfig.SchemeList.map(scheme => new Scheme(scheme)));
 
-export const pendItems = reactive<IPendItem[]>((window as any).AppConfig.PendItems);
+export function getSchemeList() {
+    return schemeList;
+}
 
 export function getScheme(schemeName: string) {
     return schemeList.find(scheme => scheme.schemeName == schemeName);

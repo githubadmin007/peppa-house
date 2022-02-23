@@ -1,8 +1,10 @@
 import { IPendItem, IScheme } from '@/hooks/configs/scheme';
 
-interface Window {
-    AppConfig: {
-        PendItems: IPendItem[];
-        SchemeList: IScheme[];
-    },
+declare global {
+    interface Window {
+        AppConfig: {
+            PendItems: IPendItem[];
+            SchemeList: IScheme[];
+        },
+    }
 }

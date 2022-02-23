@@ -10,24 +10,19 @@
         </n-space>
     </n-radio-group>
 
-    <n-card
-        v-for="(items, groupName) in groupData"
-        :key="groupName"
-        :title="`${groupName}(${items.map(item => item.totalCost).$sum()}元)`"
-    >
-        <n-grid x-gap="12" y-gap="12" :cols="1">
-            <n-gi v-for="item in items" :key="item">
-                <ItemEditor :value="item"></ItemEditor>
-            </n-gi>
-        </n-grid>
-    </n-card>
+    <ItemEditorGroup
+        v-for="(items, name) in groupData"
+        :key="name"
+        :name="name.toString()"
+        :items="items"
+    ></ItemEditorGroup>
 </template>
 
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { getScheme } from '@/hooks/configs/scheme';
-import ItemEditor from './ItemEditor.vue';
+import ItemEditorGroup from './ItemEditorGroup.vue';
 
 const route = useRoute();
 
